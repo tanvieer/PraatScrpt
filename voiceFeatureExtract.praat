@@ -1,14 +1,19 @@
 
 form Process files...
-  sentence Path C:\Users\Tanvir\Desktop\Infant\donateacry-corpus-master\AndroidWAV
+  #sentence Path C:\Users\Tanvir\Desktop\Infant\Datasets\baby emotion\HungerInfantClean
   #sentence Path C:\Users\Tanvir\Desktop\Infant\donateacry-corpus-master\test
+
+	#sentence Path C:\Users\Tanvir\Desktop\dataset\All Clean Data Infant Cry\Dont know\dkInfantClean
+	#sentence Path C:\Users\Tanvir\Desktop\dataset\All Clean Data Infant Cry\Hunger\HungerInfantClean
+	#sentence Path C:\Users\Tanvir\Desktop\dataset\All Clean Data Infant Cry\Mixed
+	sentence Path C:\Users\Tanvir\Desktop\dataset\All Clean Data Infant Cry\Not Hunger\NhuInfantClean
 endform
 
 #Optional: make sure the path has a trailing slash
 path$ = if right$(path$) = "/" then path$ else path$ + "/" fi
 
 output = Create Table with column names: "output", 0,
-  ... "fileName pitch_med pitch_mean pitch_SD pitch_max pitch_min jitter_local jitter_local_abs jitter_rap jitter_ppq5 jitter_ddp shimmer_local shimmer_local_dB shimmer_apq3 shimmer_apq5 shimmer_apq11 shimmer_dda voicing_fractunvoicedframes voicing_numbreaks voicing_degbreaks recordedTime gender age class"
+  ... "fileName pitch_med pitch_mean pitch_SD pitch_max pitch_min jitter_local jitter_local_abs jitter_rap jitter_ppq5 jitter_ddp shimmer_local shimmer_local_dB shimmer_apq3 shimmer_apq5 shimmer_apq11 shimmer_dda voicing_fractunvoicedframes voicing_numbreaks voicing_degbreaks gender age class"
 
 files = Create Strings as file list: "files", path$ + "*wav"
 total_files = Get number of strings
@@ -36,21 +41,21 @@ gender$ = right$ (filename$, 1)
 
 filename$ = left$ (filename$,length(filename$)-6)
 
-recordedTime$ = right$ (filename$, 13)
+#recordedTime$ = right$ (filename$, 13)
 
-filename$ = left$ (filename$,length(filename$)-14)
+#filename$ = left$ (filename$,length(filename$)-14)
 
 
 
 #writeInfoLine: "Name = ", gender$
   
 
-  pitch = To Pitch: 0, 75, 600
+  pitch = To Pitch: 0, 10, 800
 
   
 
-    tmin = 0.1
-    tmax = 0.5
+    tmin = 0
+    tmax = 0
     #mean = Get mean: tmin, tmax, "Hertz"
     #minimum = Get minimum: tmin, tmax, "Hertz", "Parabolic"
     #maximum = Get maximum: tmin, tmax, "Hertz", "Parabolic"
@@ -104,21 +109,39 @@ filename$ = left$ (filename$,length(filename$)-14)
   Set numeric value: row, "pitch_SD", pitch_SD
   Set numeric value: row, "pitch_max", pitch_max
   Set numeric value: row, "pitch_min", pitch_min
-  Set numeric value: row, "jitter_local", jitter_local
-  Set numeric value: row, "jitter_local_abs", jitter_local_abs
-  Set numeric value: row, "jitter_rap", jitter_rap
-  Set numeric value: row, "jitter_ppq5", jitter_ppq5
-  Set numeric value: row, "jitter_ddp", jitter_ddp
-  Set numeric value: row, "shimmer_local", shimmer_local
-  Set numeric value: row, "shimmer_local_dB", shimmer_local_dB
-  Set numeric value: row, "shimmer_apq3", shimmer_apq3
-  Set numeric value: row, "shimmer_apq5", shimmer_apq5
-  Set numeric value: row, "shimmer_apq11", shimmer_apq11
-  Set numeric value: row, "shimmer_dda", shimmer_dda
+
+
+  #Set string value: row, "jitter_local", percent$(jitter_local,3)
+  #Set string value: row, "jitter_local_abs", percent$(jitter_local_abs,3)
+  #Set string value: row, "jitter_rap",  percent$(jitter_rap,3)
+  #Set string value: row, "jitter_ppq5", percent$(jitter_ppq5 ,3)
+  #Set string value: row, "jitter_ddp", percent$(jitter_ddp,3)
+  #Set string value: row, "shimmer_local",percent$(shimmer_local,3)
+  #Set string value: row, "shimmer_local_dB",  percent$(shimmer_local_dB,3)
+  #Set string value: row, "shimmer_apq3",  percent$(shimmer_apq3,3)
+  #Set string value: row, "shimmer_apq5", percent$(shimmer_apq5 ,3)
+  #Set string value: row, "shimmer_apq11", percent$(shimmer_apq11 ,3)
+  #Set string value: row, "shimmer_dda", percent$(shimmer_dda,3)
+
+
+
+  Set numeric value: row, "jitter_local", jitter_local*100
+  Set numeric value: row, "jitter_local_abs", jitter_local_abs*100
+  Set numeric value: row, "jitter_rap",  jitter_rap*100
+  Set numeric value: row, "jitter_ppq5", jitter_ppq5*100
+  Set numeric value: row, "jitter_ddp", jitter_ddp*100
+  Set numeric value: row, "shimmer_local", shimmer_local*100
+  Set numeric value: row, "shimmer_local_dB", shimmer_local_dB * 100
+  Set numeric value: row, "shimmer_apq3", shimmer_apq3*100
+  Set numeric value: row, "shimmer_apq5", shimmer_apq5*100
+  Set numeric value: row, "shimmer_apq11", shimmer_apq11*100
+  Set numeric value: row, "shimmer_dda", shimmer_dda*100
+
+
   Set numeric value: row, "voicing_fractunvoicedframes", voicing_fractunvoicedframes
   Set numeric value: row, "voicing_numbreaks", voicing_numbreaks
   Set numeric value: row, "voicing_degbreaks", voicing_degbreaks
-  Set string value: row, "recordedTime", recordedTime$
+  #Set string value: row, "recordedTime", recordedTime$
   Set string value: row, "age", age$
   Set string value: row, "gender", gender$
   Set string value: row, "class", class$
@@ -131,7 +154,10 @@ filename$ = left$ (filename$,length(filename$)-14)
   removeObject: sound, pitch, pulses
 endfor
 
-#selectObject: output
-Save as comma-separated file: "C:\Users\Tanvir\Desktop\Android.csv"
+selectObject: output
+#Save as comma-separated file: "C:\Users\Tanvir\Desktop\dataset\All Clean Data Infant Cry\DontKnow.csv"
+#Save as comma-separated file: "C:\Users\Tanvir\Desktop\dataset\All Clean Data Infant Cry\Hunger.csv"
+#Save as comma-separated file: "C:\Users\Tanvir\Desktop\dataset\All Clean Data Infant Cry\Mixed.csv"
+Save as comma-separated file: "C:\Users\Tanvir\Desktop\dataset\All Clean Data Infant Cry\NotHunger.csv"
 
 removeObject: files, output
